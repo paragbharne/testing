@@ -1,0 +1,30 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "_artifactsLocation": {
+      "value": null
+    },
+    "_artifactsLocationSasToken": {
+      "value": null
+    },
+    "dnsNamePrefix": {
+      "value": "cmadmin"
+    },
+    "virtualNetworkRGName": {
+      "value": "cmadmin"
+    },
+    "storageAccountSuffix": {
+      "value": "cmadmin"
+    },
+    "tshirtSize": {
+      "value": "Eval"
+    },
+    "cmPassword": {
+      "value": "Paritech@123"
+    },
+    "adminPassword": {
+      "value": "Paritech@123"
+    }
+  }
+}

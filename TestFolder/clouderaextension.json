@@ -1,0 +1,114 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"masterIP": {
+			"type": "string"
+		},
+		"workerIP": {
+			"type": "string"
+		},
+		"publicIPAddressName": {
+			"type": "string",
+			"defaultValue": "TSE-Data-ip"
+		},
+		"fqdn": {
+			"type": "string"
+		},
+		"masterNodeCount": {
+			"type": "string",
+			"defaultValue": "1"
+		},
+		"dataNodeCount": {
+			"type": "string",
+			"defaultValue": "1"
+		},
+		"adminUsername": {
+			"type": "string"
+		},
+        "adminpassword": {
+			"type": "string",
+            "defaultValue": "Password@123"
+		},
+        "cmUsername": {
+            "type": "string",
+            "defaultValue": "cmuser"
+        },
+        "cmPassword": {
+            "type": "securestring",
+            "defaultValue": "Password@1234"
+        },
+        "company": {
+            "type": "string",
+            "defaultValue": "Capgemini"
+        },
+        "emailAddress": {
+            "type": "string",
+            "defaultValue": "abhishek.borah@capgemini.com"
+        },
+        "businessPhone": {
+            "type": "string",
+            "defaultValue": "8828247905"
+        },
+        "firstName": {
+            "type": "string",
+            "defaultValue": "Abhishek"
+        },
+        "lastName": {
+            "type": "string",
+            "defaultValue": "Borah"
+        },
+        "jobRole": {
+            "type": "string",
+            "defaultValue": "CMAdmin"
+        },
+        "jobFunction": {
+            "type": "string",
+            "defaultValue": "CMAdmin"
+        },
+        "installCDH": {
+            "type": "string",
+            "defaultValue": "true"
+        },
+		"vmname": {
+			"type": "string"
+        },
+        "vmSize": {
+            "type": "string",
+            "defaultValue": "Standard_D2"
+        },
+        "location": {
+			"type": "string",
+			"defaultValue": "EastUS",
+			"metadata": {
+				"description": "Location for all resources."
+			}
+		}
+	},
+	"variables": {
+		"singleQuote": "'"
+	},
+	"resources": [
+	{
+		"type": "Microsoft.Compute/virtualMachines/extensions",
+		"name": "[concat(parameters('vmname'), '/Bootstrap')]",
+		"apiVersion": "2017-03-30",
+		"location": "[parameters('location')]",
+		"properties": {
+			"publisher": "Microsoft.Azure.Extensions",
+			"type": "CustomScript",
+			"typeHandlerVersion": "2.0",
+			"autoUpgradeMinorVersion": true,
+			"settings": {
+				"fileUris": [
+				"https://raw.githubusercontent.com/paragbharne/cloudera/master/scripts/bootstrap-cloudera.sh",
+            	"https://raw.githubusercontent.com/paragbharne/cloudera/master/scripts/initialize-cloudera-server.sh",
+           		"https://raw.githubusercontent.com/paragbharne/cloudera/master/scripts/cmxDeployOnIbiza.py",
+            	"https://raw.githubusercontent.com/paragbharne/cloudera/master/scripts/install-postgresql.sh"
+
+				],
+				"commandToExecute": "[concat('sh bootstrap-cloudera.sh ', variables('singleQuote'), parameters('masterIP'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('workerIP'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('fqdn'), variables('singleQuote'),' ', variables('singleQuote'), parameters('masterNodeCount'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('dataNodeCount'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('adminUsername'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('adminPassword'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('cmUsername'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('cmPassword'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('emailAddress'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('businessPhone'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('firstName'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('lastName'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('jobRole'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('jobFunction'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('company'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('installCDH'), variables('singleQuote'), ' ', variables('singleQuote'), parameters('vmSize'), variables('singleQuote'), ' >> /var/log/cloudera-azure-initialize.log 2>&1')]"
+			}
+		}
+    }]	
+}
